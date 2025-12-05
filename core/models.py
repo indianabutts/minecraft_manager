@@ -22,3 +22,6 @@ class Version(UpdateableModel):
 
     version_number = models.CharField(max_length=16)
     edition = models.CharField(max_length=16, choices=EditionChoice.choices, default=EditionChoice.JAVA)
+
+    def __str__(self):
+        return f"{self.edition} - {self.version_number}"
