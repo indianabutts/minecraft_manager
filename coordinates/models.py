@@ -1,0 +1,21 @@
+from django.db import models
+from core import models as cm
+# Create your models here.
+
+class Coordinate(cm.ShareableModel):
+    description = models.TextField(blank=True)
+    screenshot = models.ImageField(blank=True)
+    x_coordinate = models.IntegerField()
+    y_coordinate = models.IntegerField()
+    z_coordinate = models.IntegerField() 
+    world = models.ForeignKey("worlds.World", on_delete=models.SET_NULL, null=True)
+    owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True)
+    project = models.ForeignKey("projects.Project", on_delete=models.SET_NULL, null=True, blank=True)
+    
+    @property
+    def coordinates(self):
+        return {
+            "x": self.x_coordinate,
+            "y": self.y_coordinate,
+            "z": self.z_coordinate
+        }
