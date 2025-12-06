@@ -26,17 +26,31 @@ wheels = [
 ]
 
 [[package]]
+name = "django-cotton"
+version = "2.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/14/83/5284c3b8605180b1703fff6d445794e22ecfb9a8bfca6299dc25048238df/django_cotton-2.5.0.tar.gz", hash = "sha256:56b8e61b4d8b51667f62995393a24f9a37a4da68517251180754356b76c51df7", size = 29979, upload-time = "2025-11-20T22:22:37.769Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5d/2e/d9726f5cf31720b453baba87741adc24a9c4a1ee451d044b2b2414e623a8/django_cotton-2.5.0-py3-none-any.whl", hash = "sha256:cb8ecdfda233f059d706e9a780c512e27df806aafafacbf2492ef2edd3c4f66b", size = 29316, upload-time = "2025-11-20T22:22:36.915Z" },
+]
+
+[[package]]
 name = "minecraft-notes"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "django" },
+    { name = "django-cotton" },
     { name = "pillow" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = ">=6.0" },
+    { name = "django-cotton", specifier = ">=2.5.0" },
     { name = "pillow", specifier = ">=12.0.0" },
 ]
 

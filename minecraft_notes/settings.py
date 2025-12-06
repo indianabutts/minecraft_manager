@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from os import environ, path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3(dq!n4$+_qceua%pi(z!u@v8y01-2-yfz@+l@7s36^0%hni)l'
+SECRET_KEY = environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
+CSRF_TRUSTED_ORIGINS = environ.get("DJANGO_TRUSTED_ORIGINS", default="https://minecraft-notes.com").split(" ")
 
 
 # Application definition
@@ -39,7 +41,9 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'django_cotton',
+]
 
 PROJECT_APPS = [
     'core',
@@ -66,10 +70,14 @@ ROOT_URLCONF = 'minecraft_notes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR,
+            path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -78,18 +86,35 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'minecraft_notes.wsgi.application'
+
+
+# Email Config
+EMAIL_USE_TLS = int(environ.get("EMAIL_USE_TLS", 0))
+EMAIL_HOST = environ.get("EMAIL_HOST", 'localhost')
+EMAIL_PORT = int(environ.get("EMAIL_PORT", 1025))
+EMAIL_HOST_USER = environ.get("EMAIL_USER", '')
+EMAIL_HOST_PASSWORD = environ.get("EMAIL_PASSWORD", "")
+EMAIL_SUBJECT_PREFIX = environ.get("EMAIL_SUBJECT_PREFIX", "")
+DEFAULT_FROM_EMAIL = environ.get("EMAIL_FROM_ADDRESS", "admin@stiq.ltd")
+SERVER_EMAIL = environ.get("SERVER_EMAIL", "admin@stiq.ltd")
 
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": environ.get("SQL_USER", "user"),
+        "PASSWORD": environ.get("SQL_PASSWORD", "password"),
+        "HOST": environ.get("SQL_HOST", "localhost"),
+        "PORT": environ.get("SQL_PORT", "5432"),
     }
 }
+
 
 
 # Password validation
@@ -128,4 +153,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'staticfiles/'
+STATIC_ROOT = path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+#    BASE_DIR / 'staticfiles'
+]
