@@ -12,10 +12,11 @@ class World(cm.UpdateableModel):
         
     name = models.CharField(max_length=255)
     world_file = models.FileField(blank=True, null=True)
-    game_mode = models
     version = models.ForeignKey("core.Version", on_delete=models.SET_NULL, null=True, related_name="worlds")
     seed = models.IntegerField(blank=True, null=True)
     active = models.BooleanField(default=True)
     owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True, related_name="worlds")
     game_mode = models.CharField(max_length=32, choices=GameModeChoice.choices, default=GameModeChoice.SURVIVAL)
-
+    members = models.ManyToManyField("mc_user.MCUser")
+    def __str__(self):
+        return f"[{self.game_mode}] {self.name}"

@@ -19,3 +19,6 @@ class Coordinate(cm.ShareableModel):
             "y": self.y_coordinate,
             "z": self.z_coordinate
         }
+
+    def __str__(self):
+        return f"{self.world} / {self.coordinates}"

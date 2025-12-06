@@ -8,3 +8,5 @@ class Note(cm.ShareableModel):
     project = models.ForeignKey("projects.Project", on_delete=models.CASCADE, blank=True, null=True, related_name="notes")
     
     
+    def __str__(self):
+        return f"[N-{self.id}] {self.world} {self.project}"

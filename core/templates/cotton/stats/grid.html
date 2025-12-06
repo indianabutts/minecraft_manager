@@ -1,6 +1,6 @@
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-  <c-stats.entry title="Active Worlds" value="10" color="var(--grass-green)" />
-  <c-stats.entry title="Total Projects" value="23" color="var(--gold-yellow)" />
-  <c-stats.entry title="Saved Coords" value="147" color="var(--diamond-blue)"/>
+  <c-stats.entry title="Active Worlds" value="{{active_worlds.count}}" color="var(--grass-green)" />
+  <c-stats.entry title="Total Projects" value="{{user.projects.count}}" color="var(--gold-yellow)" />
+  <c-stats.entry title="Saved Coords" value="{{user.coordinates.count}}" color="var(--diamond-blue)"/>
   <c-stats.entry title="Teams" value="13" color="#e53935"/>
 </div>
