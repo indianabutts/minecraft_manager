@@ -9,6 +9,7 @@ class WorldAdmin(admin.ModelAdmin):
         'version',
         'seed',
         'owner',
+        'active',
         'created_at',
         'updated_at'
     )

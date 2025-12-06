@@ -8,9 +8,9 @@ class Coordinate(cm.ShareableModel):
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()
     z_coordinate = models.IntegerField() 
-    world = models.ForeignKey("worlds.World", on_delete=models.SET_NULL, null=True)
-    owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True)
-    project = models.ForeignKey("projects.Project", on_delete=models.SET_NULL, null=True, blank=True)
+    world = models.ForeignKey("worlds.World", on_delete=models.SET_NULL, null=True, related_name="coordinates")
+    owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True, related_name="coordinates")
+    project = models.ForeignKey("projects.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="coordinates")
     
     @property
     def coordinates(self):

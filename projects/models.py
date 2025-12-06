@@ -6,8 +6,9 @@ from core import models as cm
 class Project(cm.ShareableModel):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    project_type = models.ForeignKey('projects.ProjectType', on_delete=models.SET_NULL, null=True)
-    owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True)
+    project_type = models.ForeignKey('projects.ProjectType', on_delete=models.SET_NULL, null=True, related_name="projects")
+    world = models.ForeignKey("worlds.World", on_delete=models.SET_NULL, null=True, related_name="projects")
+    owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True, related_name="projects")
     
 class ProjectType(cm.UpdateableModel):
     name = models.CharField(max_length=32)

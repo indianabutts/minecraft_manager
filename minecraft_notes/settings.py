@@ -50,7 +50,8 @@ PROJECT_APPS = [
     'mc_user',
     'worlds',
     'coordinates',
-    'projects'
+    'projects',
+    'notes'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS

@@ -12,7 +12,7 @@ Dashboard
         <!-- Main Content Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Left Column: Worlds List -->
-	    <c-worlds :worlds='[{"name":"World 1", "seed":198767, "game_mode":"Creative", "status":"Active"}, {"name":"World 2", "seed":398767, "game_mode":"Survival", "status":"Archived"}]'/>
+	    <c-worlds :worlds='worlds'/>
             <!-- Right Column: Activity & Quick Actions -->
             <div class="space-y-6">
                 <c-side-panel.quick-action />

@@ -4,24 +4,19 @@
       <h3 class="text-xl font-bold mb-1" style="color: var(--diamond-blue);">{{ name }}</h3>
       <p class="text-sm text-gray-400">{{ game_mode }} • Seed: {{ seed }}</p>
     </div>
-    {% if status == "Active" %}
-    <span class="project-badge" style="background: var(--grass-green); color: white;">{{ status }}</span>
+    {% if status == "True"  %}
+    <span class="project-badge" style="background: var(--grass-green); color: white;"> Active </span>
     {% else %}
     <span class="project-badge" style="background: var(--stone-gray); color: white;">Inactive</span>
     {% endif %}
   </div>
   
   <div class="grid grid-cols-3 gap-3 mb-4">
-    <c-worlds.stat name="Projects" value="12" color="var(--gold-yellow)"/>
-    <c-worlds.stat name="Coordinates" value="43" color="var(--diamond-blue)"/>
+    <c-worlds.stat name="Projects" value="{{world.projects.all.count}}" color="var(--gold-yellow)"/>
+    <c-worlds.stat name="Coordinates" value="{{world.coordinates.all.count}}" color="var(--diamond-blue)"/>
     <c-worlds.stat name="Members" value="4" color="var(--grass-green)"/>
   </div>
 
-  <div class="flex flex-wrap gap-2 mb-4">
-    <span class="text-xs px-2 py-1 rounded" style="background: rgba(124,179,66,0.2); color: var(--grass-green);">🏗️ Castle Build</span>
-    <span class="text-xs px-2 py-1 rounded" style="background: rgba(0,188,212,0.2); color: var(--diamond-blue);">💎 Diamond Mining</span>
-    <span class="text-xs px-2 py-1 rounded" style="background: rgba(255,193,7,0.2); color: var(--gold-yellow);">⛏️ Strip Mine</span>
-  </div>
 
   <div class="flex items-center space-x-4">
     <button class="flex-1 py-2 simple-btn rounded text-xs" style="background: var(--diamond-blue); color: white;">
