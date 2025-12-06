@@ -1,0 +1,113 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldCraft Manager - {% block page-title %} {% endblock page-title %}</title>
+    <script src="{% static 'tailwind.js' %}"></script>
+    <link href="{% static 'fonts/fonts.css' %}" rel="stylesheet">
+    <style>
+      :root {
+          --grass-green: #7cb342;
+          --diamond-blue: #00bcd4;
+          --gold-yellow: #ffc107;
+          --stone-gray: #78909c;
+      }
+      
+      body {
+          font-family: 'JetBrains Mono', monospace;
+          background: #1a1f2e;
+          min-height: 100vh;
+          color: #e0e0e0;
+      }
+      
+      .simple-shadow {
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      }
+      
+      .simple-btn {
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          transition: all 0.2s ease;
+          font-size: 0.75rem;
+      }
+      
+      .simple-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      }
+      
+      .world-card {
+          background: #252d3d;
+          border: 2px solid #303947;
+          transition: all 0.3s ease;
+      }
+      
+      .world-card:hover {
+          border-color: var(--diamond-blue);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0,188,212,0.15);
+      }
+      
+      .stat-block {
+          background: #252d3d;
+          border-left: 3px solid var(--grass-green);
+      }
+      
+      .nav-link {
+          position: relative;
+          transition: all 0.2s ease;
+      }
+      
+      .nav-link.active {
+          color: var(--diamond-blue);
+      }
+      
+      .project-badge {
+          font-size: 0.65rem;
+          padding: 3px 8px;
+          border-radius: 3px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+      }
+    </style>
+    {% block extrahead %} {% endblock extrahead %}
+  </head>
+
+  <body>
+    <!-- Navigation Header -->
+    <nav class="border-b-2 border-gray-800" style="background: #1f2633;">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-8">
+            <h1 class="text-2xl font-bold" style="color: var(--diamond-blue);">
+              WorldCraft
+            </h1>
+            <div class="hidden md:flex space-x-6">
+              <a href="#" class="nav-link active text-sm font-medium px-3 py-2">Worlds</a>
+              <a href="#" class="nav-link text-sm font-medium px-3 py-2 text-gray-400 hover:text-white">Projects</a>
+              <a href="#" class="nav-link text-sm font-medium px-3 py-2 text-gray-400 hover:text-white">Coordinates</a>
+              <a href="#" class="nav-link text-sm font-medium px-3 py-2 text-gray-400 hover:text-white">Teams</a>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <button class="px-4 py-2 simple-btn rounded" style="background: var(--grass-green); color: white;">
+              + New World
+            </button>
+            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main>
+      {% block content %}
+      {% endblock content %}
+    </main>
+  </body>
+
+  {% block script-end %}
+  {% endblock script-end %}
+
+</html>
