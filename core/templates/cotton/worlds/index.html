@@ -1,0 +1,13 @@
+<div class="lg:col-span-2 space-y-4">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-bold">Your Worlds</h2>
+    <div class="flex space-x-2">
+      <button class="px-3 py-1 text-xs border border-gray-600 hover:border-blue-400 transition-colors rounded">All</button>
+      <button class="px-3 py-1 text-xs border border-gray-700 hover:border-blue-400 transition-colors rounded text-gray-400">Survival</button>
+      <button class="px-3 py-1 text-xs border border-gray-700 hover:border-blue-400 transition-colors rounded text-gray-400">Creative</button>
+    </div>
+  </div>
+  {% for world in worlds %}
+  <c-worlds.entry name={{ world.name }} game_mode={{world.game_mode}} seed={{world.seed}} status={{world.status}} />
+  {% endfor %}
+</div>
