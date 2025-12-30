@@ -10,6 +10,10 @@ class Project(cm.ShareableModel):
     world = models.ForeignKey("worlds.World", on_delete=models.SET_NULL, null=True, related_name="projects")
     owner = models.ForeignKey("mc_user.MCUser", on_delete=models.SET_NULL, null=True, related_name="projects")
 
+    @property
+    def percentage_complete(self):
+        return self.tasks.filter(complete=True).count()/self.tasks.all().count()
+    
     def __str__(self):
         return f"[{self.project_type.name}] {self.world} / {self.name}"
     

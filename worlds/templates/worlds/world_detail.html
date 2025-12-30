@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+{% block page-title %}
+{{world.name}} Overview
+{% endblock page-title %}
+
+{% block content %}
+
+<div style="background: #1f2633; border-bottom: 2px solid rgba(100,181,246,0.2);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h2 class="text-3xl font-bold mb-2" style="color: var(--diamond-blue);">
+	  {{world.name}}
+        </h2>
+        <p class="text-gray-400 text-sm">{{world.game_mode}} • Seed: {{world.seed}} • Created {{world.created_at | naturalday }}</p>
+      </div>
+      <div class="flex items-center space-x-3">
+        <div class="flex -space-x-2">
+          <div class="member-avatar bg-gradient-to-br from-green-400 to-green-600 rounded-full"></div>
+          <div class="member-avatar bg-gradient-to-br from-blue-400 to-blue-600 rounded-full"></div>
+          <div class="member-avatar bg-gradient-to-br from-purple-400 to-purple-600 rounded-full"></div>
+          <div class="member-avatar bg-gradient-to-br from-red-400 to-red-600 rounded-full"></div>
+        </div>
+        <button class="px-4 py-2 bg-gray-700 bg-opacity-50 hover:bg-opacity-70 transition-colors text-xs rounded">
+          ⚙️ Settings
+        </button>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-4 gap-4">
+      <div class="bg-black bg-opacity-20 p-4 rounded">
+        <div class="text-xs text-gray-400 mb-1">Projects</div>
+        <div class="text-2xl font-bold" style="color: var(--gold-yellow);">{{world.projects.all.count}}</div>
+        <div class="text-xs text-gray-500 mt-1">3 in progress</div>
+      </div>
+      <div class="bg-black bg-opacity-20 p-4 rounded">
+        <div class="text-xs text-gray-400 mb-1">Coordinates</div>
+        <div class="text-2xl font-bold" style="color: var(--diamond-blue);">{{world.coordinates.all.count}}</div>
+        <div class="text-xs text-gray-500 mt-1">12 this week</div>
+      </div>
+      <div class="bg-black bg-opacity-20 p-4 rounded">
+        <div class="text-xs text-gray-400 mb-1">Notes</div>
+        <div class="text-2xl font-bold" style="color: #64b5f6;">{{world.notes.all.count}}</div>
+        <div class="text-xs text-gray-500 mt-1">8 private</div>
+      </div>
+      <div class="bg-black bg-opacity-20 p-4 rounded">
+        <div class="text-xs text-gray-400 mb-1">Members</div>
+        <div class="text-2xl font-bold" style="color: var(--grass-green);">4</div>
+        <div class="text-xs text-gray-500 mt-1">All active</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div style="background: #1f2633; border-bottom: 1px solid rgba(100,181,246,0.1);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex space-x-2">
+      <button class="tab-button active" onclick="switchTab('projects')">Projects</button>
+      <button class="tab-button" onclick="switchTab('coordinates')">Coordinates</button>
+      <button class="tab-button" onclick="switchTab('notes')">Notes</button>
+      <button class="tab-button" onclick="switchTab('team')">Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  
+  <!-- Projects Tab -->
+
+  <div id="projects-tab" class="tab-content">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Projects</h3>
+      <button class="px-4 py-2 simple-btn rounded" style="background: var(--grass-green); color: white;" onclick="openModal('project')">
+        + New Project
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Project Card 1 -->
+      {% for project in world.projects.all %}
+      <div class="card p-6 rounded-lg simple-shadow">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="text-lg font-bold" style="color: var(--gold-yellow);">{{project.name}}</h4>
+	  {% if project.percentage_complete < 1 %}
+					      <span class="tag" style="background: rgba(124,179,66,0.3); color: var(--grass-green);">IN PROGRESS</span>
+					      {% else %}
+					      <span class="tag" style="background: rgba(124,179,66,0.3); color: var(--stone-gray);">COMPLETE</span>
+          {% endif %}
+        </div>
+        
+        <p class="text-sm text-gray-400 mb-4">{{project.description}}</p>
+        
+        <div class="mb-4">
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-gray-400">Progress</span>
+            <span style="color: var(--grass-green);">{% widthratio project.percentage_complete 1 100 %}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: {% widthratio project.percentage_complete 1 100 %}%;"></div>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex -space-x-2">
+            <div class="w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-full border-2 border-gray-800"></div>
+            <div class="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full border-2 border-gray-800"></div>
+          </div>
+	  {% if world.private == True %}
+	  <span class="text-xs text-gray-500">🔒 Private</span>
+	  {% else %}
+          <span class="text-xs text-gray-500">🌐 Shared</span>
+	  {% endif %}
+        </div>
+        
+        <div class="space-y-2 mb-4">
+	  {% for task in project.tasks.all%}
+          <div class="flex items-center space-x-2 text-xs">
+            <input type="checkbox" {% if task.complete %}checked{% endif %} class="w-3 h-3">
+            <span class="text-gray-400 {% if task.complete %} line-through {% endif %}">{{task.name}}</span>
+          </div>
+	  {% endfor %}
+
+        </div>
+        
+        <button class="w-full py-2 bg-gray-700 bg-opacity-50 hover:bg-opacity-70 transition-colors text-xs rounded">
+          View Details
+        </button>
+      </div>
+      {% endfor %}
+  </div>
+
+  <!-- Coordinates Tab -->
+  <div id="coordinates-tab" class="tab-content" style="display: none;">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Saved Coordinates</h3>
+      <button class="px-4 py-2 simple-btn rounded" style="background: var(--diamond-blue); color: white;" onclick="openModal('coordinate')">
+        + Save Location
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <!-- Coordinate Item 1 -->
+      <div class="coordinate-item p-4 rounded fade-in-up">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h4 class="font-bold text-lg" style="color: var(--diamond-blue);">💎 Main Diamond Mine</h4>
+            <p class="text-sm text-gray-400">Best spot for diamond mining</p>
+          </div>
+          <span class="text-xs text-gray-500">🌐 Shared</span>
+        </div>
+        <div class="flex items-center space-x-4 mt-3 text-sm">
+          <span class="font-mono" style="color: var(--redstone-red);">X: -1250</span>
+          <span class="font-mono" style="color: var(--grass-green);">Y: -59</span>
+          <span class="font-mono" style="color: var(--diamond-blue);">Z: 3420</span>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="flex -space-x-2">
+            <div class="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full border-2 border-gray-800"></div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">COPY</button>
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">EDIT</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coordinate Item 2 -->
+      <div class="coordinate-item p-4 rounded fade-in-up" >
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h4 class="font-bold text-lg" style="color: var(--grass-green);">🏠 Main Base</h4>
+            <p class="text-sm text-gray-400">Primary spawn location</p>
+          </div>
+          <span class="text-xs text-gray-500">🌐 Shared</span>
+        </div>
+        <div class="flex items-center space-x-4 mt-3 text-sm">
+          <span class="font-mono" style="color: var(--redstone-red);">X: 100</span>
+          <span class="font-mono" style="color: var(--grass-green);">Y: 72</span>
+          <span class="font-mono" style="color: var(--diamond-blue);">Z: -250</span>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="flex -space-x-2">
+            <div class="w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-full border-2 border-gray-800"></div>
+            <div class="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full border-2 border-gray-800"></div>
+            <div class="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full border-2 border-gray-800"></div>
+            <div class="w-6 h-6 bg-gradient-to-br from-red-400 to-red-600 rounded-full border-2 border-gray-800"></div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">COPY</button>
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">EDIT</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coordinate Item 3 -->
+      <div class="coordinate-item p-4 rounded fade-in-up" >
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h4 class="font-bold text-lg" style="color: var(--gold-yellow);">⛏️ Strip Mine Entrance</h4>
+            <p class="text-sm text-gray-400">My personal mining operation</p>
+          </div>
+          <span class="text-xs text-gray-500">🔒 Private</span>
+        </div>
+        <div class="flex items-center space-x-4 mt-3 text-sm">
+          <span class="font-mono" style="color: var(--redstone-red);">X: 2480</span>
+          <span class="font-mono" style="color: var(--grass-green);">Y: -54</span>
+          <span class="font-mono" style="color: var(--diamond-blue);">Z: -1670</span>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="flex -space-x-2">
+            <div class="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full border-2 border-gray-800"></div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">COPY</button>
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">EDIT</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coordinate Item 4 -->
+      <div class="coordinate-item p-4 rounded fade-in-up" >
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h4 class="font-bold text-lg" style="color: var(--redstone-red);">🔥 Nether Portal</h4>
+            <p class="text-sm text-gray-400">Fast travel hub</p>
+          </div>
+          <span class="text-xs text-gray-500">🌐 Shared</span>
+        </div>
+        <div class="flex items-center space-x-4 mt-3 text-sm">
+          <span class="font-mono" style="color: var(--redstone-red);">X: 85</span>
+          <span class="font-mono" style="color: var(--grass-green);">Y: 68</span>
+          <span class="font-mono" style="color: var(--diamond-blue);">Z: -235</span>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="flex -space-x-2">
+            <div class="w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-full border-2 border-gray-800"></div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">COPY</button>
+            <button class="px-3 py-1 text-xs bg-gray-700 bg-opacity-50 hover:bg-opacity-70 rounded">EDIT</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Tab -->
+  <div id="notes-tab" class="tab-content" style="display: none;">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Notes & Ideas</h3>
+      <button class="px-4 py-2 simple-btn rounded" style="background: var(--gold-yellow); color: white;">
+        + New Note
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="card p-5 rounded-lg block-shadow">
+        <div class="flex justify-between items-start mb-3">
+          <h4 class="font-bold">Resource Checklist</h4>
+          <span class="text-xs text-gray-500">🌐 Shared</span>
+        </div>
+        <p class="text-sm text-gray-400 mb-3">Items needed for next building phase</p>
+        <ul class="text-sm space-y-1">
+          <li>• 10 stacks of stone bricks</li>
+          <li>• 5 stacks of oak planks</li>
+          <li>• 64 glass blocks</li>
+        </ul>
+        <div class="mt-4 text-xs text-gray-500">Updated 2 hours ago</div>
+      </div>
+
+      <div class="card p-5 rounded-lg block-shadow">
+        <div class="flex justify-between items-start mb-3">
+          <h4 class="font-bold">Enchanting Strategy</h4>
+          <span class="text-xs text-gray-500">🔒 Private</span>
+        </div>
+        <p class="text-sm text-gray-400 mb-3">Best enchantments for diamond gear</p>
+        <p class="text-sm">Focus on Efficiency V, Unbreaking III, and Fortune III for pickaxe...</p>
+        <div class="mt-4 text-xs text-gray-500">Updated 1 day ago</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Tab -->
+  <div id="team-tab" class="tab-content" style="display: none;">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Team Members</h3>
+      <button class="px-4 py-2 simple-btn rounded" style="background: var(--grass-green); color: white;">
+        Invite Player
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="card p-5 rounded-lg block-shadow">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded block-shadow-sm"></div>
+          <div class="flex-1">
+            <h4 class="font-bold text-lg">Steve_Builder</h4>
+            <p class="text-sm text-gray-400">Admin • Joined 45 days ago</p>
+            <div class="flex items-center space-x-3 mt-2 text-xs">
+              <span style="color: var(--gold-yellow);">6 projects</span>
+              <span style="color: var(--diamond-blue);">15 coords</span>
+              <span class="px-2 py-1 rounded" style="background: rgba(124,179,66,0.2); color: var(--grass-green);">ONLINE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-5 rounded-lg block-shadow">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded block-shadow-sm"></div>
+          <div class="flex-1">
+            <h4 class="font-bold text-lg">Alex_Miner</h4>
+            <p class="text-sm text-gray-400">Member • Joined 30 days ago</p>
+            <div class="flex items-center space-x-3 mt-2 text-xs">
+              <span style="color: var(--gold-yellow);">3 projects</span>
+              <span style="color: var(--diamond-blue);">22 coords</span>
+              <span class="px-2 py-1 rounded" style="background: rgba(124,179,66,0.2); color: var(--grass-green);">ONLINE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-5 rounded-lg block-shadow">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded block-shadow-sm"></div>
+          <div class="flex-1">
+            <h4 class="font-bold text-lg">CreeperKing</h4>
+            <p class="text-sm text-gray-400">Member • Joined 20 days ago</p>
+            <div class="flex items-center space-x-3 mt-2 text-xs">
+              <span style="color: var(--gold-yellow);">2 projects</span>
+              <span style="color: var(--diamond-blue);">8 coords</span>
+              <span class="px-2 py-1 rounded" style="background: rgba(120,144,156,0.2); color: var(--stone-gray);">OFFLINE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-5 rounded-lg block-shadow">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded block-shadow-sm"></div>
+          <div class="flex-1">
+            <h4 class="font-bold text-lg">EnderExplorer</h4>
+            <p class="text-sm text-gray-400">Member • Joined 2 days ago</p>
+            <div class="flex items-center space-x-3 mt-2 text-xs">
+              <span style="color: var(--gold-yellow);">1 project</span>
+              <span style="color: var(--diamond-blue);">3 coords</span>
+              <span class="px-2 py-1 rounded" style="background: rgba(124,179,66,0.2); color: var(--grass-green);">ONLINE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="project-modal" class="modal-overlay">
+  <div class="modal-content p-8 rounded-lg block-shadow">
+    <h3 class="text-2xl font-bold mb-6" style="color: var(--grass-green);">New Project</h3>
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm font-bold mb-2">Project Name</label>
+        <input type="text" class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded focus:border-diamond-blue" placeholder="e.g., Mega Farm">
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2">Description</label>
+        <textarea class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded focus:border-diamond-blue" rows="4" placeholder="What are you building?"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2">Privacy</label>
+        <select class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded">
+          <option>🌐 Shared with all members</option>
+          <option>🔒 Private (only me)</option>
+        </select>
+      </div>
+      <div class="flex space-x-4 mt-6">
+        <button type="button" class="flex-1 py-3 simple-btn rounded text-xs" style="background: var(--grass-green); color: white;">
+          Create Project
+        </button>
+        <button type="button" class="flex-1 py-3 bg-gray-700 hover:bg-gray-600 text-xs rounded" onclick="closeModal('project')">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="coordinate-modal" class="modal-overlay">
+  <div class="modal-content p-8 rounded-lg block-shadow">
+    <h3 class="text-2xl font-bold mb-6" style="color: var(--diamond-blue);">Save Coordinates</h3>
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm font-bold mb-2">Location Name</label>
+        <input type="text" class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded" placeholder="e.g., Village #3">
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-bold mb-2">X</label>
+          <input type="number" class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded" placeholder="0">
+        </div>
+        <div>
+          <label class="block text-sm font-bold mb-2">Y</label>
+          <input type="number" class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded" placeholder="64">
+        </div>
+        <div>
+          <label class="block text-sm font-bold mb-2">Z</label>
+          <input type="number" class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded" placeholder="0">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2">Notes</label>
+        <textarea class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded" rows="3" placeholder="Any additional information..."></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2">Privacy</label>
+        <select class="w-full px-4 py-2 bg-black bg-opacity-20 border-2 border-gray-700 rounded">
+          <option>🌐 Shared with all members</option>
+          <option>🔒 Private (only me)</option>
+        </select>
+      </div>
+      <div class="flex space-x-4 mt-6">
+        <button type="button" class="flex-1 py-3 simple-btn rounded text-xs" style="background: var(--diamond-blue); color: white;">
+          Save Location
+        </button>
+        <button type="button" class="flex-1 py-3 bg-gray-700 hover:bg-gray-600 text-xs rounded" onclick="closeModal('coordinate')">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.style.display = 'none';
+      });
+      
+      // Remove active class from all buttons
+      document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(tabName + '-tab').style.display = 'block';
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+  }
+  
+  function openModal(type) {
+      document.getElementById(type + '-modal').classList.add('active');
+  }
+  
+  function closeModal(type) {
+      document.getElementById(type + '-modal').classList.remove('active');
+  }
+  
+  // Close modal when clicking outside
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+          if (e.target === this) {
+              this.classList.remove('active');
+          }
+      });
+  });
+</script>
+
+{% endblock content %}

@@ -19,9 +19,9 @@
 
 
   <div class="flex items-center space-x-4">
-    <button class="flex-1 py-2 simple-btn rounded text-xs" style="background: var(--diamond-blue); color: white;">
+    <a href="{% url 'world_detail' world_id=world.id %}" class="flex-1 py-2 simple-btn rounded text-xs" style="background: var(--diamond-blue); color: white;">
       Open World
-    </button>
+    </a>
     <button class="px-4 py-2 bg-gray-700 bg-opacity-50 hover:bg-opacity-70 transition-colors text-xs rounded">
       ⚙️
     </button>

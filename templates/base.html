@@ -72,6 +72,105 @@
           text-transform: uppercase;
           letter-spacing: 0.5px;
       }
+
+          .tab-button {
+            position: relative;
+            padding: 12px 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: var(--diamond-blue);
+            color: var(--diamond-blue);
+        }
+        
+        .tab-button:hover:not(.active) {
+            border-bottom-color: rgba(100,181,246,0.3);
+        }
+        
+        .card {
+            background: #252d3d;
+            border: 2px solid #303947;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: var(--diamond-blue);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--grass-green), var(--diamond-blue));
+            transition: width 0.3s ease;
+        }
+        
+        .coordinate-item {
+            background: #252d3d;
+            border-left: 3px solid var(--diamond-blue);
+            transition: all 0.2s ease;
+        }
+        
+        .coordinate-item:hover {
+            background: #2a3342;
+            border-left-width: 4px;
+        }
+        
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #303947;
+            transition: all 0.2s ease;
+        }
+        
+        .member-avatar:hover {
+            border-color: var(--diamond-blue);
+            transform: scale(1.1);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #252d3d;
+            border: 2px solid var(--diamond-blue);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
     </style>
     {% block extrahead %} {% endblock extrahead %}
   </head>
